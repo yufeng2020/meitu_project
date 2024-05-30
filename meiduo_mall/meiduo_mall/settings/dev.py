@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
-import os
+import os, sys
 # import jinja2
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,15 +31,25 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+
+# 在这里增加导包路径   增加了导包路径 以后每个子应用都可以直接简化书写
+sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
+
+
 # Application definition
 
 INSTALLED_APPS = [
     # 'django.contrib.admin',
-    'django.contrib.auth',
+    'django.contrib.auth',#包含了用户认证系统
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    # 用户注册模块应用# meitu_project/meiduo_mall/meiduo_mall/apps/users
+    # 'meiduo_mall.apps.users'#只要追加导包路径后  可以直接使用下面的'users'添加用户模块应用
+    'users',#用户模块
+    'contents',#首页广告
 ]
 
 MIDDLEWARE = [
@@ -224,3 +234,8 @@ LOGGING = {
         },
     }
 }
+
+
+# 指定本项目用户模型类  子应用.用户模型类   如果不指定回2按照源码阅读到其他的地方AUTH_USER_MODEL = 'auth.User'  
+AUTH_USER_MODEL = 'users.User'
+

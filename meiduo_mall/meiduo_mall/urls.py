@@ -15,9 +15,24 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
+
+# from django.conf.urls import url#现在已经废弃掉了这个url包
+# from django.urls import re_path
+
+
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
     
+    # users总路由
+    # re_path(r'^', include('users.urls')),#因此在users目录中要新建一个urls.py 并且在里面写东西
+    re_path(r'^', include(('users.urls', 'users'), namespace='users')),#不能使用
+    # contents的总路由
+    re_path(r'^', include(('contents.urls', 'contents'), namespace='contents')),
 ]
+
+
+
+
+

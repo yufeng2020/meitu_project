@@ -20,3 +20,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+# meitu_project/meiduo_mall/meiduo_mall/apps/users

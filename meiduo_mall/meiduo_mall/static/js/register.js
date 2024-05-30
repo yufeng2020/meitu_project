@@ -1,11 +1,11 @@
 // 我们采用的时ES6的语法
 // 创建Vue对象 vm
 let vm = new Vue({
-    el: '#app', // 通过ID选择器找到绑定的HTML内容
-    // 修改Vue读取变量的语法
-    delimiters: ['[[', ']]'],
+    el: '#app', // 通过ID选择器找到绑定的HTML内容  在register.html中有一个id="app" id选择器
+    // 修改Vue读取变量的语法  本来[[ error_name_message ]]应该是{{error_name_message}}   现在自定义了  所以可以为[[ error_name_message ]]
+    delimiters: ['[[', ']]'],  
     data: { // 数据对象
-        // v-model
+        // v-model  对应html文件中的  用户每输入一个 都会在对应的v-model中拿到该变量
         username: '',
         password: '',
         password2: '',
@@ -18,7 +18,7 @@ let vm = new Vue({
         send_flag: false, // 类比上厕所，send_flag就是锁，false表示门开，true表示门关
         sms_code: '',
 
-        // v-show
+        // v-show  对应html文件中的  错误信息默认不展示  所以为false
         error_name: false,
         error_password: false,
         error_password2: false,
@@ -27,7 +27,7 @@ let vm = new Vue({
         error_image_code: false,
         error_sms_code: false,
 
-        // error_message
+        // error_message  对应html文件中的
         error_name_message: '',
         error_mobile_message: '',
         error_image_code_message: '',
@@ -109,13 +109,13 @@ let vm = new Vue({
                 this.error_name = true;
             }
 
-            // 判断用户名是否重复注册
+            // 判断用户名是否重复注册暂时注释  axios来发送ajax请求 发送局部刷新效果
             if (this.error_name == false) { // 只有当用户输入的用户名满足条件时才回去判断
                 let url = '/usernames/' + this.username + '/count/';
                 axios.get(url, {
-                    responseType: 'json'
+                    responseType: 'json'//告诉后端数据定义是json
                 })
-                    .then(response => {
+                    .then(response => {//成功的回调   拿到后端传给前端的数据  响应的正确报文在response中
                         if (response.data.count == 1) {
                             // 用户名已存在
                             this.error_name_message = '用户名已存在';
@@ -125,7 +125,7 @@ let vm = new Vue({
                             this.error_name = false;
                         }
                     })
-                    .catch(error => {
+                    .catch(error => {//失败的回调  响应的错误报文在error中
                         console.log(error.response);
                     })
             }
@@ -157,7 +157,7 @@ let vm = new Vue({
                 this.error_mobile = true;
             }
 
-            // 判断手机号是否重复注册
+            // 判断手机号是否重复注册  暂时注释  axios请求
             if (this.error_mobile == false) {
                 let url = '/mobiles/'+ this.mobile + '/count/';
                 axios.get(url, {
@@ -208,13 +208,20 @@ let vm = new Vue({
             this.check_password();
             this.check_password2();
             this.check_mobile();
+            // 自己添加的  校验图形验证码
+            this.check_image_code();
             this.check_sms_code();
             this.check_allow();
 
-            // 在校验之后，注册数据中，只要有错误，就禁用掉表单的提交事件
-            if (this.error_name == true || this.error_password == true || this.error_password2 == true || this.error_mobile == true || this.error_sms_code == true || this.error_allow == true) {
+            // 在校验之后，注册数据中，只要有错误，就禁用掉表单的提交事件  这里为什么没有error_image_code的判断  到时候看看要不要加上
+            // if (this.error_name == true || this.error_password == true || this.error_password2 == true || this.error_mobile == true || this.error_sms_code == true || this.error_allow == true) {
+            // 自己加上
+            // if (this.error_name == true || this.error_password == true || this.error_password2 == true || this.error_mobile == true || this.error_sms_code == true || this.error_image_code == true || this.error_allow == true) {
+            if (this.error_name == true || this.error_password == true || this.error_password2 == true || this.error_mobile == true || this.error_allow == true) {
                 // 禁用掉表单的提交事件
-                window.event.returnValue = false;
+                // window.event.returnValue = false;  //这句代码被弃用了
+                console.log('进入到了js前端判断中!')
+                window.Event.returnValue = false;
             }
         },
     }
